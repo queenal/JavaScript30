@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Scoped CSS Variables and JS</title>
+</head>
+
+<body>
+    <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+    <div class="controls">
+        <label for="spacing">Spacing:</label>
+        <input type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+        <label for="blur">Blur:</label>
+        <input type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+        <label for="base">Base Color</label>
+        <input type="color" name="base" value="#ffc600">
+    </div>
+
+    <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+
+    <style>
+        /*
+      misc styles, nothing to do with CSS variables
+    */
+        /* 定义全局样式变量 */
+        
+         :root {
+            --base: #ffc600;
+            --spacing: 10px;
+            --blur: 10px;
+        }
+        
+        img {
+            padding: var(--spacing);
+            background: var(--base);
+            filter: blur(var(--blur));
+        }
+        
+        body {
+            text-align: center;
+        }
+        
+        body {
+            background: #193549;
+            color: white;
+            font-family: 'helvetica neue', sans-serif;
+            font-weight: 100;
+            font-size: 50px;
+        }
+        
+        .controls {
+            margin-bottom: 50px;
+        }
+        
+        input {
+            width: 100px;
+        }
+    </style>
+
+    <script>
+        // 获取input,并为其添加监听事件
+        const inputs = document.querySelectorAll('.controls input');
+        inputs.forEach(input => input.addEventListener('change', handleUpdate))
+        inputs.forEach(input => input.addEventListener('mousemove', handleUpdate))
+
+        // 改变或者移动鼠标事件 执行的动作
+        function handleUpdate() {
+            // 获取变量的单位  spacing--px  blur--px color--''
+            // this--input元素  dataset是自定义属性
+            console.log(this.dataset)
+            const suffix = this.dataset.sizing || ''
+                // 改变全局变量的值去改变元素的样式属性值
+            document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix)
+        }
+    </script>
+
+</body>
+
+</html>
