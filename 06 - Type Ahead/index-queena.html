@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <form class="search-form">
+        <input type="text" class="search" placeholder="City or State">
+        <ul class="suggestions">
+            <li>Filter for a city</li>
+            <li>or a state</li>
+        </ul>
+    </form>
+    <script>
+        const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+        // 1.监听输入值
+        const searchInput = document.querySelector('.search')
+        searchInput.addEventListener('change', matchData)
+        searchInput.addEventListener('keyup', matchData)
+            // 2.使用fetch获取数据
+        const allData = []
+        fetch(endpoint).then(res => res.json()).then(data => allData.push(...data))
+
+        // 3.根据输入值和数据相匹配
+        // 3.1正则表达式
+        function findMatches(wordToMatch, cities) {
+            return cities.filter(place => {
+                const regex = new RegExp(wordToMatch, 'gi')
+                return
+            })
+        }
+
+        function matchData() {
+            let filterCity = allData.filter(item => item.city === this.value)
+            console.log(filterCity)
+            const suggestions = document.querySelector('.suggestions')
+            filterCity.forEach(item => {
+                    let liHtml = `<li>${item.city}</li>`
+                    suggestions.appendChild(liHtml)
+                })
+                // console.log(allData)
+                // console.log(this.value)
+
+        }
+
+        // 3.将匹配到的值放在ul中
+        // 4.将关键词设置高亮再显示在搜索框中
+    </script>
+</body>
+
+</html>

@@ -154,9 +154,12 @@
         panels.forEach((panel) => panel.addEventListener('click', toggleOpen))
 
         function toggleOpen(e) {
-            console.log('e', e);
-            console.log('this', this)
-            console.log('classList', this.classList)
+            // console.log('e', e);
+            // console.log('this', this)
+            // console.log('classList', this.classList)
+            panels.forEach((panel) => {
+                console.log('panel-classList', panel.classList)
+            })
             this.classList.toggle('open') // classList.toggle class有就会去除，没有则会添加
         }
         panels.forEach(panel => panel.addEventListener('transitionend', toggleActive))
@@ -168,12 +171,6 @@
             }
         }
     </script>
-
-
-
-
-
-
 </body>
 
 </html>
