@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HTML5 Canvas</title>
+</head>
+
+<body>
+    <canvas id="draw" width="800" height="800"></canvas>
+    <script>
+        /* 整体思路：1.获取宽高，确定鼠标事件监听范围
+                                   2.初始化画笔的线条填充色和形状、衔接形状、结尾形状
+                                   3. 定义初始点、是否要绘画的变量
+                                   4. 优化事件：颜色、线条
+                      */
+
+        const canvas = document.querySelector('#draw');
+        const ctx = canvas.getContext('2d');
+
+        // 画板的宽高
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // 线条样式
+        ctx.strokeStyle = '#BADA55' // 填充色
+        ctx.lineJoin = 'round'; // 两条线段的衔接处
+        ctx.lineCap = 'round'; // 线段结尾形状
+        ctx.lineWidth = 100; //线条宽度
+
+
+        let isDrawing = false;
+        let lastX = 0; //起点初始值
+        let lastY = 0;
+        let hue = 0; //h(hue)s(Saturation)l(light)色相变量
+        let direction = false // lineWidth线条粗细变量
+
+
+        function draw(e) {
+            if (!isDrawing) return;
+            [lastX, lastY] = [e.offsetX, e.offsetY]
+            ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`
+            ctx.beginPath()
+            ctx.moveTo(lastX, lastY)
+            ctx.lineTo(e.offsetX, e.offsetY)
+                // console.log('e.offsetX, e.offsetY', e.offsetX, e.offsetY)
+            ctx.stroke()
+
+            hue++;
+            if (hue >= 360) {
+                hue = 0
+            }
+            if (ctx.lineWidth >= 100 || ctx.lineWidth <= 0) {
+                direction = !direction;
+            }
+
+            if (direction) {
+                ctx.lineWidth++;
+            } else {
+                ctx.lineWidth--;
+            }
+        }
+
+        // 监听mouseDown事件,鼠标按下
+        canvas.addEventListener('mousedown', e => {
+            isDrawing = true;
+            // console.log(e)
+        })
+
+        // 监听mouseMove事件，鼠标移动，没有区分按下与否
+        canvas.addEventListener('mousemove', draw)
+
+        // 监听mouseUp事件，按钮放开
+        canvas.addEventListener('mouseup', () => isDrawing = false)
+
+        // 监听mouseOut事件，移出画板
+        canvas.addEventListener('mouseout', () => isDrawing = false)
+    </script>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+    </style>
+
+</body>
+
+</html>
